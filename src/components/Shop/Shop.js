@@ -4,14 +4,15 @@ import Product from '../Product/Product';
 import './Shop.css'
 import '../Common css/bootstrap.min.css'
 import Cart from '../Cart/Cart';
+import { addToDatabaseCart } from '../../utilities/databaseManager';
 
 const Shop = () => {
-    const first10 = fakeData.slice(0,10);
-    const [products,setProducs] = useState(first10);
     const [cart,setCart] = useState([]);
     const handleAddProduct = (product) =>{
         let newCart = [...cart,product];
         setCart(newCart);
+        const sameProduct = newCart.filter( pd => pd.key === product.key);
+        addToDatabaseCart(product.key, sameProduct.length);
     }
 
     return (
@@ -20,7 +21,15 @@ const Shop = () => {
 
             </div>
             <div className="product-container pl-5 mt-3 border-right border-aqua col-md-9">
-                {first10.map(product => <Product addToCart={handleAddProduct} info={product} ></Product>)}
+                {
+                fakeData.slice(0,10).map(product => <Product key={product.key} showButton={true} addToCart={handleAddProduct} info={product} ></Product>)
+                }
+                {
+                fakeData.slice(10,20).map(product => <Product key={product.key} showButton={true} addToCart={handleAddProduct} info={product} ></Product>)
+                }
+                {
+                fakeData.slice(20.30).map(product => <Product key={product.key} showButton={true} addToCart={handleAddProduct} info={product} ></Product>)
+                }
             </div>
             <div className="cart-container mt-3  col-md-2">
                 <Cart fullCart={cart}></Cart>
