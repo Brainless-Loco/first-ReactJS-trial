@@ -1,9 +1,12 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 
 const Cart = (props) => {
     const cart=props.fullCart;
-    const total = cart.reduce((total,product) => total+product.price,0);
+    let total = 0;
+    console.log(cart);
+    for(let i=0;i<cart.length;i++){
+        total += cart[i].price*cart[i].quantity;
+    }
     let shippingAndHandling = 0.0;
     if(total<500) shippingAndHandling = total*0.2;
     shippingAndHandling.toFixed(2);
@@ -28,9 +31,9 @@ const Cart = (props) => {
             </div>
             <div className="pl-lg-2 text-center">
                 <h6 className="text-danger font-weight-bolder">Order Total: &nbsp; &nbsp; ${((total+shippingAndHandling)*0.1+total+shippingAndHandling).toFixed(2)}</h6>
-                <Link to="/review" className="btn btn-sm col-10 font-weight-bold py-2 btn-warning border border-dark">
-                Review your order
-                </Link> 
+                {
+                    props.children
+                }
             </div>
         </div>
     );

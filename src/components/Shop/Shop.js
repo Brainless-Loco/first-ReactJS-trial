@@ -1,15 +1,40 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import fakeData from '../../fakeData';
 import Product from '../Product/Product';
 import './Shop.css'
 import '../Common css/bootstrap.min.css'
 import Cart from '../Cart/Cart';
-import { addToDatabaseCart } from '../../utilities/databaseManager';
+import { addToDatabaseCart, getDatabaseCart } from '../../utilities/databaseManager';
+import { Link } from 'react-router-dom';
 
 const Shop = () => {
     const [cart,setCart] = useState([]);
+
+    useEffect( ()=>{
+        const savedCart = getDatabaseCart();
+        const allPoductKeys = Object.keys(savedCart);
+        const previousCart = allPoductKeys.map( pdKey => {
+            const thisProductInfo = fakeData.find( pd => pd.key === pdKey);
+            thisProductInfo.quantity = savedCart[pdKey];
+            return thisProductInfo;
+        });
+        setCart(previousCart);
+    },[])
+
     const handleAddProduct = (product) =>{
-        let newCart = [...cart,product];
+        let alreadyInCart = cart.find(pd => pd.key === product.key);
+        let count = 1;
+        let newCart;
+        if(alreadyInCart){
+            count = alreadyInCart.quantity + 1;
+            alreadyInCart.quantity = count;
+            const others = cart.filter(pd=> pd.key!==product.key);
+            newCart = [...others,alreadyInCart];
+        }
+        else{
+            product.quantity = 1;
+            newCart = [...cart,product];
+        }
         setCart(newCart);
         const sameProduct = newCart.filter( pd => pd.key === product.key);
         addToDatabaseCart(product.key, sameProduct.length);
@@ -32,7 +57,11 @@ const Shop = () => {
                 }
             </div>
             <div className="cart-container mt-3  col-md-2">
-                <Cart fullCart={cart}></Cart>
+                <Cart fullCart={cart}>
+                    <Link to="/review" className="btn btn-sm col-10 font-weight-bold py-2 btn-warning border border-dark">
+                    Review your order
+                    </Link> 
+                </Cart>
             </div>
         </div>
     );

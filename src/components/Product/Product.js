@@ -22,7 +22,7 @@ const Product = (props) => {
                         <br/>
                         <br/>
                         { props.showButton===true &&
-                            <button onClick={()=>props.addToCart(info)} className="btn btn-sm col-8 btn-warning border border-dark"> <FontAwesomeIcon icon={faShoppingCart} /> add to cart</button>}
+                            <button onClick={()=>props.addToCart(info)} className="btn btn-sm col-8 btn-warning border border-dark"> <FontAwesomeIcon icon={faShoppingCart} />add to cart</button>}
                     </div>
                     <div className="col-md-6 float-left">
                         <h5 className="font-weight-bolder">Feature</h5>
