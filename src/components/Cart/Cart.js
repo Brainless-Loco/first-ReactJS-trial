@@ -3,7 +3,6 @@ import React from 'react';
 const Cart = (props) => {
     const cart=props.fullCart;
     let total = 0;
-    console.log(cart);
     for(let i=0;i<cart.length;i++){
         total += cart[i].price*cart[i].quantity;
     }

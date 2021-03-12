@@ -25,9 +25,10 @@ const Shop = () => {
         let alreadyInCart = cart.find(pd => pd.key === product.key);
         let count = 1;
         let newCart;
-        if(alreadyInCart){
+        if(alreadyInCart !== undefined){
             count = alreadyInCart.quantity + 1;
             alreadyInCart.quantity = count;
+            console.log(alreadyInCart);
             const others = cart.filter(pd=> pd.key!==product.key);
             newCart = [...others,alreadyInCart];
         }
@@ -36,8 +37,7 @@ const Shop = () => {
             newCart = [...cart,product];
         }
         setCart(newCart);
-        const sameProduct = newCart.filter( pd => pd.key === product.key);
-        addToDatabaseCart(product.key, sameProduct.length);
+        addToDatabaseCart(product.key, count);
     }
 
     return (
